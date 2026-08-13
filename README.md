@@ -33,7 +33,8 @@ import { Button } from 'forma/vue';
 
 <template>
   <Button type="button">Save</Button>
-  <Button type="button" variant="cute">Love it</Button>
+  <Button type="button" variant="cute" color="rebeccapurple">Love it</Button>
+  <Button type="button" variant="cute" animation="none">No bounce</Button>
 </template>
 ```
 
@@ -48,7 +49,8 @@ export function SaveButton() {
   return (
     <>
       <Button type="button">Save</Button>
-      <Button type="button" variant="cute">Love it</Button>
+      <Button type="button" variant="cute" color="rgb(126, 87, 194)">Love it</Button>
+      <Button type="button" variant="cute" animation="none">No bounce</Button>
     </>
   );
 }
@@ -64,7 +66,8 @@ import 'forma/components/button';
 
 ```html
 <forma-button type="button">Save</forma-button>
-<forma-button type="button" variant="cute">Love it</forma-button>
+<forma-button type="button" variant="cute" color="rebeccapurple">Love it</forma-button>
+<forma-button type="button" variant="cute" animation="none">No bounce</forma-button>
 ```
 
 Alternatively, register every Forma component through the aggregate Stencil loader:
@@ -108,6 +111,8 @@ Available button tokens include:
 | Property | Attribute | Type | Default |
 | --- | --- | --- | --- |
 | `disabled` | `disabled` | `boolean` | `false` |
+| `color` | `color` | `string` | Variant palette |
+| `animation` | `animation` | `'zoom' \| 'none'` | Variant default |
 | `variant` | `variant` | `'simple' \| 'cute'` | `'simple'` |
 | `type` | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` |
 | `name` | `name` | `string` | — |
@@ -116,15 +121,28 @@ Available button tokens include:
 
 The default slot supplies the visible label. Click handling uses the native `click` event; Forma does not emit a duplicate custom event.
 
-The `simple` variant preserves Forma's neutral button appearance. Use the `cute` variant for a rounded pink button with playful hover and press feedback.
+The `simple` variant preserves Forma's neutral button appearance and defaults to no movement. The `cute` variant defaults to a rounded pink palette and the `zoom` hover and press animation. Set `animation="none"` to disable movement while retaining the variant's color, highlight, and shadow transitions.
 
-TypeScript consumers can import the variant union as `FormaButtonVariant` from `forma`.
+The optional `color` property accepts solid CSS colors such as names, hex, RGB(A), HSL(A), modern color functions, and CSS variables. Each variant derives its own gradient, border, focus, and interaction colors from the supplied base, then chooses black or white label text for contrast. Invalid colors, unresolved variables, and non-solid values use the variant palette instead.
+
+```html
+<div style="--brand-color: hsl(262 52% 55%)">
+  <forma-button variant="cute" color="var(--brand-color)">Branded button</forma-button>
+</div>
+```
+
+Existing `--forma-button-*` CSS tokens take precedence over property-derived colors. A CSS-variable color updates the CSS-derived palette when its variable changes, but the calculated label contrast refreshes only when `color` or `variant` changes. Applications that change the variable independently can set `--forma-button-color` alongside it for immediate label-color control.
+
+TypeScript consumers can import `FormaButtonVariant` and `FormaButtonAnimation` from `forma`.
 
 ## Project structure
 
 ```text
 src/
   components/       Stencil components with their encapsulated styles
+    forma-button/
+      variants/     Layout, palette, and visual interaction styles
+      animations/   Reusable movement and scaling animations
   css/              Shared base CSS and design tokens
   entries/          Framework-agnostic registration entries
   react/            React public barrel and generated wrappers

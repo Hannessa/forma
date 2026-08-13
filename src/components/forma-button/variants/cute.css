@@ -1,17 +1,83 @@
 /* Give the cute variant a soft, rounded pink appearance. */
 :host([variant='cute']) button {
+  /* Build the cute palette from one optional custom base color. */
+  --forma-button-custom-gradient-start: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 68%,
+    #ffffff
+  );
+  --forma-button-custom-border-color: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 82%,
+    #000000
+  );
+  --forma-button-custom-shadow-color: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 32%,
+    transparent
+  );
+  --forma-button-custom-shadow-hover-color: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 40%,
+    transparent
+  );
+  --forma-button-custom-shadow-active-color: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 34%,
+    transparent
+  );
+  --forma-button-custom-gradient-hover-start: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 58%,
+    #ffffff
+  );
+  --forma-button-custom-gradient-hover-end: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 90%,
+    #ffffff
+  );
+  --forma-button-custom-gradient-active-start: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 88%,
+    #000000
+  );
+  --forma-button-custom-gradient-active-end: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 72%,
+    #000000
+  );
+  --forma-button-custom-focus-color: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 42%,
+    #ffffff
+  );
+  --forma-button-variant-transitions:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+
+  /* Keep the rounded cute layout and exact original pink defaults. */
   align-items: center;
   appearance: none;
   background: var(
     --forma-button-background,
-    linear-gradient(135deg, #ff8fc7 0%, #f765ac 100%)
+    linear-gradient(
+      135deg,
+      var(--forma-button-custom-gradient-start, #ff8fc7) 0%,
+      var(--forma-button-custom-color, #f765ac) 100%
+    )
   );
-  border: 1px solid var(--forma-button-border-color, #f34f9e);
+  border: 1px solid
+    var(
+      --forma-button-border-color,
+      var(--forma-button-custom-border-color, #f34f9e)
+    );
   border-radius: var(--forma-button-border-radius, 999px);
   box-shadow:
-    0 0.25rem 0.75rem rgb(221 68 141 / 28%),
+    0 0.25rem 0.75rem
+      var(--forma-button-custom-shadow-color, rgb(221 68 141 / 28%)),
     inset 0 1px 0 rgb(255 255 255 / 42%);
-  color: var(--forma-button-color, #ffffff);
+  color: var(--forma-button-color, var(--forma-button-custom-label-color, #ffffff));
   cursor: pointer;
   display: inline-flex;
   font: inherit;
@@ -22,47 +88,49 @@
   min-height: var(--forma-button-min-height, 2.5rem);
   padding: var(--forma-button-padding-block, 0.625rem)
     var(--forma-button-padding-inline, 1.125rem);
-  transform: translateY(0) scale(1);
-  transition:
-    background 180ms ease,
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1.2);
 }
 
-/* Lift and brighten the button on hover. */
+/* Brighten the palette and shadow on hover. */
 :host([variant='cute']) button:hover:not(:disabled) {
   background: var(
     --forma-button-background-hover,
-    linear-gradient(135deg, #ffa8d3 0%, #fb70b5 100%)
+    linear-gradient(
+      135deg,
+      var(--forma-button-custom-gradient-hover-start, #ffa8d3) 0%,
+      var(--forma-button-custom-gradient-hover-end, #fb70b5) 100%
+    )
   );
   box-shadow:
-    0 0.45rem 1rem rgb(221 68 141 / 36%),
+    0 0.45rem 1rem
+      var(--forma-button-custom-shadow-hover-color, rgb(221 68 141 / 36%)),
     inset 0 1px 0 rgb(255 255 255 / 52%);
-  transform: translateY(-2px) scale(1.025);
 }
 
-/* Compress the button for playful press feedback. */
+/* Deepen the palette and shadow during activation. */
 :host([variant='cute']) button:active:not(:disabled) {
   background: var(
     --forma-button-background-active,
-    linear-gradient(135deg, #ef5da4 0%, #dc3f8d 100%)
+    linear-gradient(
+      135deg,
+      var(--forma-button-custom-gradient-active-start, #ef5da4) 0%,
+      var(--forma-button-custom-gradient-active-end, #dc3f8d) 100%
+    )
   );
   box-shadow:
-    0 0.15rem 0.4rem rgb(190 42 113 / 30%),
+    0 0.15rem 0.4rem
+      var(--forma-button-custom-shadow-active-color, rgb(190 42 113 / 30%)),
     inset 0 1px 0 rgb(255 255 255 / 25%);
-  transform: translateY(1px) scale(0.98);
 }
 
 /* Match keyboard focus to the pink palette. */
 :host([variant='cute']) button:focus-visible {
-  outline: 3px solid var(--forma-button-focus-color, #ffb7da);
+  outline: 3px solid
+    var(--forma-button-focus-color, var(--forma-button-custom-focus-color, #ffb7da));
   outline-offset: 3px;
 }
 
-/* Keep disabled cute buttons still and subdued. */
+/* Keep disabled cute buttons subdued. */
 :host([variant='cute']) button:disabled {
   cursor: not-allowed;
   opacity: var(--forma-button-disabled-opacity, 0.5);
-  transform: none;
 }

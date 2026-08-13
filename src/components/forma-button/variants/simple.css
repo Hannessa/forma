@@ -1,11 +1,36 @@
 /* Preserve the original neutral button appearance. */
 :host([variant='simple']) button {
+  /* Derive custom interaction colors only when a custom base color exists. */
+  --forma-button-custom-background-hover: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 82%,
+    #000000
+  );
+  --forma-button-custom-background-active: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 68%,
+    #000000
+  );
+  --forma-button-custom-focus-color: color-mix(
+    in srgb,
+    var(--forma-button-custom-color) 55%,
+    #ffffff
+  );
+  --forma-button-variant-transitions:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+
+  /* Keep the original simple layout and neutral defaults. */
   align-items: center;
   appearance: none;
-  background: var(--forma-button-background, var(--forma-color-accent, #262626));
+  background: var(
+    --forma-button-background,
+    var(--forma-button-custom-color, var(--forma-color-accent, #262626))
+  );
   border: 1px solid var(--forma-button-border-color, transparent);
   border-radius: var(--forma-button-border-radius, var(--forma-radius-medium, 0.375rem));
-  color: var(--forma-button-color, #ffffff);
+  color: var(--forma-button-color, var(--forma-button-custom-label-color, #ffffff));
   cursor: pointer;
   display: inline-flex;
   font: inherit;
@@ -16,27 +41,31 @@
   min-height: var(--forma-button-min-height, 2.5rem);
   padding: var(--forma-button-padding-block, 0.625rem)
     var(--forma-button-padding-inline, 1rem);
-  transition:
-    background-color 120ms ease,
-    border-color 120ms ease,
-    box-shadow 120ms ease,
-    transform 120ms ease;
 }
 
 /* Darken the button when a pointer hovers over it. */
 :host([variant='simple']) button:hover:not(:disabled) {
-  background: var(--forma-button-background-hover, var(--forma-color-accent-hover, #404040));
+  background: var(
+    --forma-button-background-hover,
+    var(--forma-button-custom-background-hover, var(--forma-color-accent-hover, #404040))
+  );
 }
 
-/* Press the button down during activation. */
+/* Darken the button further during activation. */
 :host([variant='simple']) button:active:not(:disabled) {
-  background: var(--forma-button-background-active, var(--forma-color-accent-active, #171717));
-  transform: translateY(1px);
+  background: var(
+    --forma-button-background-active,
+    var(--forma-button-custom-background-active, var(--forma-color-accent-active, #171717))
+  );
 }
 
 /* Show a clear keyboard focus indicator. */
 :host([variant='simple']) button:focus-visible {
-  outline: 2px solid var(--forma-button-focus-color, var(--forma-color-focus, #2563eb));
+  outline: 2px solid
+    var(
+      --forma-button-focus-color,
+      var(--forma-button-custom-focus-color, var(--forma-color-focus, #2563eb))
+    );
   outline-offset: 2px;
 }
 

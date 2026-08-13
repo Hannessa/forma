@@ -2,3 +2,8 @@
   display: inline-block;
   vertical-align: middle;
 }
+
+/* Apply visual transitions supplied by the active variant. */
+button {
+  transition: var(--forma-button-variant-transitions, outline-color 0s);
+}
