@@ -1,9 +1,5 @@
-:host {
-  display: inline-block;
-  vertical-align: middle;
-}
-
-button {
+/* Preserve the original neutral button appearance. */
+:host([variant='simple']) button {
   align-items: center;
   appearance: none;
   background: var(--forma-button-background, var(--forma-color-accent, #262626));
@@ -27,22 +23,25 @@ button {
     transform 120ms ease;
 }
 
-button:hover:not(:disabled) {
+/* Darken the button when a pointer hovers over it. */
+:host([variant='simple']) button:hover:not(:disabled) {
   background: var(--forma-button-background-hover, var(--forma-color-accent-hover, #404040));
 }
 
-button:active:not(:disabled) {
+/* Press the button down during activation. */
+:host([variant='simple']) button:active:not(:disabled) {
   background: var(--forma-button-background-active, var(--forma-color-accent-active, #171717));
   transform: translateY(1px);
 }
 
-button:focus-visible {
+/* Show a clear keyboard focus indicator. */
+:host([variant='simple']) button:focus-visible {
   outline: 2px solid var(--forma-button-focus-color, var(--forma-color-focus, #2563eb));
   outline-offset: 2px;
 }
 
-button:disabled {
+/* Make disabled buttons visibly and functionally inactive. */
+:host([variant='simple']) button:disabled {
   cursor: not-allowed;
   opacity: var(--forma-button-disabled-opacity, 0.5);
 }
-

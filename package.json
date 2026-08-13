@@ -48,6 +48,7 @@
     "build:react": "tsc -p tsconfig.react.json",
     "build:entries": "tsc -p tsconfig.entries.json",
     "build:css": "node scripts/copy-css.mjs",
+    "watch": "stencil build --watch",
     "prepare": "npm run build"
   },
   "dependencies": {

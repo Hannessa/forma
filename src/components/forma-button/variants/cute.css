@@ -1,0 +1,68 @@
+/* Give the cute variant a soft, rounded pink appearance. */
+:host([variant='cute']) button {
+  align-items: center;
+  appearance: none;
+  background: var(
+    --forma-button-background,
+    linear-gradient(135deg, #ff8fc7 0%, #f765ac 100%)
+  );
+  border: 1px solid var(--forma-button-border-color, #f34f9e);
+  border-radius: var(--forma-button-border-radius, 999px);
+  box-shadow:
+    0 0.25rem 0.75rem rgb(221 68 141 / 28%),
+    inset 0 1px 0 rgb(255 255 255 / 42%);
+  color: var(--forma-button-color, #ffffff);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: var(--forma-button-font-weight, 700);
+  gap: var(--forma-button-gap, 0.5rem);
+  justify-content: center;
+  line-height: 1.25;
+  min-height: var(--forma-button-min-height, 2.5rem);
+  padding: var(--forma-button-padding-block, 0.625rem)
+    var(--forma-button-padding-inline, 1.125rem);
+  transform: translateY(0) scale(1);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1.2);
+}
+
+/* Lift and brighten the button on hover. */
+:host([variant='cute']) button:hover:not(:disabled) {
+  background: var(
+    --forma-button-background-hover,
+    linear-gradient(135deg, #ffa8d3 0%, #fb70b5 100%)
+  );
+  box-shadow:
+    0 0.45rem 1rem rgb(221 68 141 / 36%),
+    inset 0 1px 0 rgb(255 255 255 / 52%);
+  transform: translateY(-2px) scale(1.025);
+}
+
+/* Compress the button for playful press feedback. */
+:host([variant='cute']) button:active:not(:disabled) {
+  background: var(
+    --forma-button-background-active,
+    linear-gradient(135deg, #ef5da4 0%, #dc3f8d 100%)
+  );
+  box-shadow:
+    0 0.15rem 0.4rem rgb(190 42 113 / 30%),
+    inset 0 1px 0 rgb(255 255 255 / 25%);
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Match keyboard focus to the pink palette. */
+:host([variant='cute']) button:focus-visible {
+  outline: 3px solid var(--forma-button-focus-color, #ffb7da);
+  outline-offset: 3px;
+}
+
+/* Keep disabled cute buttons still and subdued. */
+:host([variant='cute']) button:disabled {
+  cursor: not-allowed;
+  opacity: var(--forma-button-disabled-opacity, 0.5);
+  transform: none;
+}

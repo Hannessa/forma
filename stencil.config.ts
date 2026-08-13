@@ -2,6 +2,9 @@ import type { Config } from '@stencil/core';
 import { reactOutputTarget } from '@stencil/react-output-target';
 import { vueOutputTarget } from '@stencil/vue-output-target';
 
+// Preserve separately compiled framework wrappers while Stencil watches.
+const isWatchBuild = process.argv.includes('--watch');
+
 export const config: Config = {
   namespace: 'forma',
   sourceMap: true,
@@ -15,12 +18,14 @@ export const config: Config = {
     {
       type: 'dist',
       esmLoaderPath: '../loader',
+      empty: !isWatchBuild,
     },
     // Build one custom-element module per component for framework wrappers.
     {
       type: 'dist-custom-elements',
       externalRuntime: false,
       generateTypeDeclarations: true,
+      empty: !isWatchBuild,
     },
     // Generate Vue wrappers that register their custom elements on import.
     vueOutputTarget({

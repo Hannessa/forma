@@ -5,8 +5,8 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { FormaButtonType } from "./components/forma-button/forma-button";
-export { FormaButtonType } from "./components/forma-button/forma-button";
+import { FormaButtonType, FormaButtonVariant } from "./components/forma-button/forma-button";
+export { FormaButtonType, FormaButtonVariant } from "./components/forma-button/forma-button";
 export namespace Components {
     interface FormaButton {
         /**
@@ -23,6 +23,10 @@ export namespace Components {
          */
         "type": FormaButtonType;
         "value"?: string;
+        /**
+          * @default 'simple'
+         */
+        "variant": FormaButtonVariant;
     }
 }
 declare global {
@@ -52,10 +56,15 @@ declare namespace LocalJSX {
          */
         "type"?: FormaButtonType;
         "value"?: string;
+        /**
+          * @default 'simple'
+         */
+        "variant"?: FormaButtonVariant;
     }
 
     interface FormaButtonAttributes {
         "disabled": boolean;
+        "variant": FormaButtonVariant;
         "type": FormaButtonType;
         "name": string;
         "value": string;

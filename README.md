@@ -33,6 +33,7 @@ import { Button } from 'forma/vue';
 
 <template>
   <Button type="button">Save</Button>
+  <Button type="button" variant="cute">Love it</Button>
 </template>
 ```
 
@@ -44,7 +45,12 @@ The React output target generates the equivalent React wrapper.
 import { Button } from 'forma/react';
 
 export function SaveButton() {
-  return <Button type="button">Save</Button>;
+  return (
+    <>
+      <Button type="button">Save</Button>
+      <Button type="button" variant="cute">Love it</Button>
+    </>
+  );
 }
 ```
 
@@ -58,6 +64,7 @@ import 'forma/components/button';
 
 ```html
 <forma-button type="button">Save</forma-button>
+<forma-button type="button" variant="cute">Love it</forma-button>
 ```
 
 Alternatively, register every Forma component through the aggregate Stencil loader:
@@ -101,6 +108,7 @@ Available button tokens include:
 | Property | Attribute | Type | Default |
 | --- | --- | --- | --- |
 | `disabled` | `disabled` | `boolean` | `false` |
+| `variant` | `variant` | `'simple' \| 'cute'` | `'simple'` |
 | `type` | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` |
 | `name` | `name` | `string` | — |
 | `value` | `value` | `string` | — |
@@ -108,12 +116,16 @@ Available button tokens include:
 
 The default slot supplies the visible label. Click handling uses the native `click` event; Forma does not emit a duplicate custom event.
 
+The `simple` variant preserves Forma's neutral button appearance. Use the `cute` variant for a rounded pink button with playful hover and press feedback.
+
+TypeScript consumers can import the variant union as `FormaButtonVariant` from `forma`.
+
 ## Project structure
 
 ```text
 src/
-  components/       Stencil component implementations
-  css/              Base and component CSS
+  components/       Stencil components with their encapsulated styles
+  css/              Shared base CSS and design tokens
   entries/          Framework-agnostic registration entries
   react/            React public barrel and generated wrappers
   vue/              Vue public barrel and generated wrappers
@@ -134,6 +146,16 @@ Rebuild after making source changes with:
 ```sh
 npm run build
 ```
+
+After an initial build, watch Stencil component changes without removing the
+compiled Vue, React, registration, or base CSS outputs:
+
+```sh
+npm run watch
+```
+
+Run a normal build again after adding or removing components so the generated
+framework wrappers are compiled with the new component exports.
 
 The build performs these steps in order:
 

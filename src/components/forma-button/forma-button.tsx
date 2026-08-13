@@ -1,15 +1,19 @@
 import { Component, h, Prop } from '@stencil/core';
 
 export type FormaButtonType = 'button' | 'submit' | 'reset';
+export type FormaButtonVariant = 'simple' | 'cute';
 
 @Component({
   tag: 'forma-button',
-  styleUrl: '../../css/components/forma-button.css',
+  styleUrls: ['forma-button.css', 'variants/simple.css', 'variants/cute.css'],
   scoped: true,
 })
 export class FormaButton {
   // Disable native pointer, keyboard, and form interactions.
   @Prop({ reflect: true }) disabled = false;
+
+  // Use the original neutral appearance unless another variant is selected.
+  @Prop({ reflect: true }) variant: FormaButtonVariant = 'simple';
 
   // Keep buttons inert by default to avoid accidental form submissions.
   @Prop({ reflect: true }) type: FormaButtonType = 'button';
