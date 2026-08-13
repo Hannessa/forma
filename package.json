@@ -1,0 +1,84 @@
+{
+  "name": "forma",
+  "version": "0.1.0",
+  "description": "Framework-agnostic UI Web Components built with Stencil.",
+  "type": "module",
+  "types": "./dist/types/components.d.ts",
+  "collection": "./dist/collection/collection-manifest.json",
+  "exports": {
+    ".": {
+      "types": "./dist/types/components.d.ts",
+      "import": "./dist/components/index.js"
+    },
+    "./vue": {
+      "types": "./dist/vue/index.d.ts",
+      "import": "./dist/vue/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    },
+    "./components": {
+      "types": "./loader/index.d.ts",
+      "import": "./loader/index.js"
+    },
+    "./components/button": {
+      "types": "./dist/register/button.d.ts",
+      "import": "./dist/register/button.js"
+    },
+    "./components/*": {
+      "types": "./dist/components/*",
+      "import": "./dist/components/*"
+    },
+    "./css/base.css": "./dist/css/base.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/",
+    "loader/",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./dist/register/*.js",
+    "./dist/css/*.css"
+  ],
+  "scripts": {
+    "build": "stencil build && npm run build:vue && npm run build:react && npm run build:entries && npm run build:css",
+    "build:vue": "tsc -p tsconfig.vue.json",
+    "build:react": "tsc -p tsconfig.react.json",
+    "build:entries": "tsc -p tsconfig.entries.json",
+    "build:css": "node scripts/copy-css.mjs",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@stencil/react-output-target": "^1.6.1"
+  },
+  "devDependencies": {
+    "@stencil/core": "^4.44.0",
+    "@stencil/vue-output-target": "^0.14.1",
+    "@types/react": "^19.2.18",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "typescript": "^5.9.3",
+    "vue": "^3.5.41"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19",
+    "vue": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    }
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

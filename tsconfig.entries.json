@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "./dist/register",
+    "noImplicitAny": false,
+    "outDir": "./dist/register",
+    "rootDir": "./src/entries"
+  },
+  "include": [
+    "src/entries/**/*.ts"
+  ]
+}
+

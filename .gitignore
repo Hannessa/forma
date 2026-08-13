@@ -1,0 +1,7 @@
+node_modules/
+dist/
+loader/
+src/react/generated/
+src/vue/generated/
+*.log
+*.bat
