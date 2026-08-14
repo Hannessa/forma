@@ -1,4 +1,23 @@
 :host {
+  /* Define the shared primary fallback once for all neutral variants. */
+  --forma-button-base-color: var(
+    --forma-color-primary,
+    var(--forma-color-accent, #0d6efd)
+  );
+  --forma-button-base-hover-color: var(
+    --forma-color-primary-hover,
+    var(
+      --forma-color-accent-hover,
+      color-mix(in srgb, var(--forma-button-base-color) 82%, #000000)
+    )
+  );
+  --forma-button-base-active-color: var(
+    --forma-color-primary-active,
+    var(
+      --forma-color-accent-active,
+      color-mix(in srgb, var(--forma-button-base-color) 68%, #000000)
+    )
+  );
   display: inline-block;
   vertical-align: middle;
 }

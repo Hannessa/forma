@@ -34,6 +34,8 @@ import { Button } from 'forma/vue';
 <template>
   <Button type="button">Save</Button>
   <Button type="button" variant="cute" color="rebeccapurple">Love it</Button>
+  <Button type="button" variant="outline">Learn more</Button>
+  <Button type="button" color="gold" text-color="navy">Custom label</Button>
   <Button type="button" variant="cute" animation="none">No bounce</Button>
 </template>
 ```
@@ -50,6 +52,8 @@ export function SaveButton() {
     <>
       <Button type="button">Save</Button>
       <Button type="button" variant="cute" color="rgb(126, 87, 194)">Love it</Button>
+      <Button type="button" variant="outline">Learn more</Button>
+      <Button type="button" color="gold" textColor="navy">Custom label</Button>
       <Button type="button" variant="cute" animation="none">No bounce</Button>
     </>
   );
@@ -67,6 +71,8 @@ import 'forma/components/button';
 ```html
 <forma-button type="button">Save</forma-button>
 <forma-button type="button" variant="cute" color="rebeccapurple">Love it</forma-button>
+<forma-button type="button" variant="outline">Learn more</forma-button>
+<forma-button type="button" color="gold" text-color="navy">Custom label</forma-button>
 <forma-button type="button" variant="cute" animation="none">No bounce</forma-button>
 ```
 
@@ -90,14 +96,14 @@ Tokens can be overridden globally or for a component subtree:
 
 ```css
 :root {
-  --forma-color-accent: #1d4ed8;
-  --forma-color-accent-hover: #1e40af;
+  --forma-color-primary: #1d4ed8;
   --forma-button-border-radius: 999px;
 }
 ```
 
 Available button tokens include:
 
+- `--forma-color-primary`, the shared `simple` and `outline` base color
 - `--forma-button-background`, `--forma-button-background-hover`, and `--forma-button-background-active`
 - `--forma-button-color` and `--forma-button-border-color`
 - `--forma-button-border-radius` and `--forma-button-focus-color`
@@ -111,9 +117,10 @@ Available button tokens include:
 | Property | Attribute | Type | Default |
 | --- | --- | --- | --- |
 | `disabled` | `disabled` | `boolean` | `false` |
-| `color` | `color` | `string` | Variant palette |
+| `color` | `color` | `string` | Variant palette or primary color |
+| `textColor` | `text-color` | `string` | Variant or automatic label color |
 | `animation` | `animation` | `'zoom' \| 'none'` | Variant default |
-| `variant` | `variant` | `'simple' \| 'cute'` | `'simple'` |
+| `variant` | `variant` | `'simple' \| 'cute' \| 'outline'` | `'simple'` |
 | `type` | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` |
 | `name` | `name` | `string` | — |
 | `value` | `value` | `string` | — |
@@ -121,9 +128,13 @@ Available button tokens include:
 
 The default slot supplies the visible label. Click handling uses the native `click` event; Forma does not emit a duplicate custom event.
 
-The `simple` variant preserves Forma's neutral button appearance and defaults to no movement. The `cute` variant defaults to a rounded pink palette and the `zoom` hover and press animation. Set `animation="none"` to disable movement while retaining the variant's color, highlight, and shadow transitions.
+The `simple` variant is a solid primary button and defaults to no movement. The `outline` variant uses the same primary color for its border and label, keeps a transparent background, and adds subtle color tints on hover and press. The shared `--forma-color-primary` token defaults to the classic Bootstrap primary blue and can be overridden globally or for a component subtree. Legacy `--forma-color-accent`, `--forma-color-accent-hover`, and `--forma-color-accent-active` tokens remain supported as fallbacks.
 
-The optional `color` property accepts solid CSS colors such as names, hex, RGB(A), HSL(A), modern color functions, and CSS variables. Each variant derives its own gradient, border, focus, and interaction colors from the supplied base, then chooses black or white label text for contrast. Invalid colors, unresolved variables, and non-solid values use the variant palette instead.
+The `cute` variant retains its rounded pink palette and the `zoom` hover and press animation. Set `animation="none"` to disable movement while retaining the variant's color, highlight, and shadow transitions.
+
+The optional `color` property accepts solid CSS colors such as names, hex, RGB(A), HSL(A), modern color functions, and CSS variables. Each variant derives its gradient, border, focus, and interaction colors from the supplied base. Filled variants favor white label text and switch to black only for very bright colors. The outline label uses the button color by default. Invalid colors, unresolved variables, and non-solid values use the variant palette instead.
+
+Use `textColor` in JavaScript, React, and Vue or `text-color` in HTML to override the label with another solid CSS color. Invalid or unresolved text colors fall back to the variant or automatic label color.
 
 ```html
 <div style="--brand-color: hsl(262 52% 55%)">
@@ -131,7 +142,7 @@ The optional `color` property accepts solid CSS colors such as names, hex, RGB(A
 </div>
 ```
 
-Existing `--forma-button-*` CSS tokens take precedence over property-derived colors. A CSS-variable color updates the CSS-derived palette when its variable changes, but the calculated label contrast refreshes only when `color` or `variant` changes. Applications that change the variable independently can set `--forma-button-color` alongside it for immediate label-color control.
+Existing `--forma-button-*` CSS tokens take precedence over property-derived colors. A CSS-variable color updates the CSS-derived palette when its variable changes, but the calculated label contrast refreshes only when `color`, `textColor`, or `variant` changes. Applications that change the variable independently can set `textColor` or `--forma-button-color` alongside it for immediate label-color control.
 
 TypeScript consumers can import `FormaButtonVariant` and `FormaButtonAnimation` from `forma`.
 

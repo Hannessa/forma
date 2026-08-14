@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Framework-agnostic UI Web Components built with Stencil.",
   "type": "module",
+  "main": "dist/index.cjs.js",
   "types": "./dist/types/components.d.ts",
   "collection": "./dist/collection/collection-manifest.json",
   "exports": {

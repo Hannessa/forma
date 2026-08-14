@@ -1,0 +1,79 @@
+/* Present the primary palette as a transparent outlined control. */
+:host([variant='outline']) button {
+  /* Build every interaction color from the custom or shared base color. */
+  --forma-button-outline-color: var(
+    --forma-button-custom-color,
+    var(--forma-button-base-color)
+  );
+  --forma-button-outline-hover-background: color-mix(
+    in srgb,
+    var(--forma-button-outline-color) 10%,
+    transparent
+  );
+  --forma-button-outline-active-background: color-mix(
+    in srgb,
+    var(--forma-button-outline-color) 18%,
+    transparent
+  );
+  --forma-button-outline-focus-color: color-mix(
+    in srgb,
+    var(--forma-button-outline-color) 55%,
+    #ffffff
+  );
+  --forma-button-variant-transitions:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    color 120ms ease;
+
+  /* Match the simple layout while keeping the background transparent. */
+  align-items: center;
+  appearance: none;
+  background: var(--forma-button-background, transparent);
+  border: 1px solid
+    var(--forma-button-border-color, var(--forma-button-outline-color));
+  border-radius: var(--forma-button-border-radius, var(--forma-radius-medium, 0.375rem));
+  color: var(
+    --forma-button-color,
+    var(--forma-button-custom-label-color, var(--forma-button-outline-color))
+  );
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: var(--forma-button-font-weight, 600);
+  gap: var(--forma-button-gap, 0.5rem);
+  justify-content: center;
+  line-height: 1.25;
+  min-height: var(--forma-button-min-height, 2.5rem);
+  padding: var(--forma-button-padding-block, 0.625rem)
+    var(--forma-button-padding-inline, 1rem);
+}
+
+/* Add a light primary tint while preserving the outline text color. */
+:host([variant='outline']) button:hover:not(:disabled) {
+  background: var(
+    --forma-button-background-hover,
+    var(--forma-button-outline-hover-background)
+  );
+}
+
+/* Strengthen the tint while the button is pressed. */
+:host([variant='outline']) button:active:not(:disabled) {
+  background: var(
+    --forma-button-background-active,
+    var(--forma-button-outline-active-background)
+  );
+}
+
+/* Keep keyboard focus tied to the active outline palette. */
+:host([variant='outline']) button:focus-visible {
+  outline: 2px solid
+    var(--forma-button-focus-color, var(--forma-button-outline-focus-color));
+  outline-offset: 2px;
+}
+
+/* Make disabled outline buttons visibly and functionally inactive. */
+:host([variant='outline']) button:disabled {
+  cursor: not-allowed;
+  opacity: var(--forma-button-disabled-opacity, 0.5);
+}

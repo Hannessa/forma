@@ -20,6 +20,7 @@ export namespace Components {
          */
         "disabled": boolean;
         "name"?: string;
+        "textColor"?: string;
         /**
           * @default 'button'
          */
@@ -55,6 +56,7 @@ declare namespace LocalJSX {
          */
         "disabled"?: boolean;
         "name"?: string;
+        "textColor"?: string;
         /**
           * @default 'button'
          */
@@ -70,6 +72,7 @@ declare namespace LocalJSX {
         "disabled": boolean;
         "variant": FormaButtonVariant;
         "color": string;
+        "textColor": string;
         "animation": FormaButtonAnimation;
         "type": FormaButtonType;
         "name": string;

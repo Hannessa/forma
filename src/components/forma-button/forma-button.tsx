@@ -1,13 +1,19 @@
-import { Component, Element, h, Prop, State, Watch } from '@stencil/core';
+import { Component, Element, h, Host, Prop, State, Watch } from '@stencil/core';
 
 export type FormaButtonType = 'button' | 'submit' | 'reset';
-export type FormaButtonVariant = 'simple' | 'cute';
+export type FormaButtonVariant = 'simple' | 'cute' | 'outline';
 export type FormaButtonAnimation = 'zoom' | 'none';
+
+type CustomPalette = {
+  color?: string;
+  labelColor?: string;
+};
 
 // Let each variant select motion without coupling movement to its visual CSS.
 const defaultAnimations: Record<FormaButtonVariant, FormaButtonAnimation> = {
   simple: 'none',
   cute: 'zoom',
+  outline: 'none',
 };
 
 @Component({
@@ -16,6 +22,7 @@ const defaultAnimations: Record<FormaButtonVariant, FormaButtonAnimation> = {
     'forma-button.css',
     'variants/simple.css',
     'variants/cute.css',
+    'variants/outline.css',
     'animations/zoom.css',
   ],
   scoped: true,
@@ -23,9 +30,8 @@ const defaultAnimations: Record<FormaButtonVariant, FormaButtonAnimation> = {
 export class FormaButton {
   @Element() host!: HTMLElement;
 
-  // Store validated palette state without changing the public color value.
-  @State() private hasCustomColor = false;
-  @State() private customLabelColor = '#ffffff';
+  // Store all validated palette values together so rendering stays atomic.
+  @State() private customPalette: CustomPalette = {};
 
   // Disable native pointer, keyboard, and form interactions.
   @Prop({ reflect: true }) disabled = false;
@@ -35,6 +41,9 @@ export class FormaButton {
 
   // Override the variant palette with a solid CSS color.
   @Prop({ reflect: true }) color?: string;
+
+  // Override the variant or automatically selected label color.
+  @Prop({ attribute: 'text-color', reflect: true }) textColor?: string;
 
   // Override the motion selected by the active variant.
   @Prop({ reflect: true }) animation?: FormaButtonAnimation;
@@ -49,31 +58,37 @@ export class FormaButton {
   // Give icon-only buttons an accessible name.
   @Prop({ attribute: 'aria-label' }) ariaLabel: string | null = null;
 
-  // Resolve CSS variables after the component has joined the document.
-  componentDidLoad() {
+  // Resolve the initial palette before rendering to avoid a label-color flash.
+  componentWillLoad() {
     this.updateCustomColor();
   }
 
   // Recalculate the palette when its public inputs change.
   @Watch('color')
+  @Watch('textColor')
   @Watch('variant')
   protected handlePaletteChange() {
     this.updateCustomColor();
   }
 
-  // Validate the color and select readable black or white label text.
+  // Validate both public colors and derive one stable palette update.
   private updateCustomColor() {
-    const channels = this.resolveColorChannels(this.color);
-    const hasCustomColor = channels !== undefined;
-    const customLabelColor = channels ? this.getContrastingLabel(channels) : '#ffffff';
+    const colorChannels = this.resolveColorChannels(this.color);
+    const textColorChannels = this.resolveColorChannels(this.textColor);
+    const color = colorChannels ? this.color : undefined;
+    let labelColor = textColorChannels ? this.textColor : undefined;
 
-    // Avoid unnecessary renders when the derived palette is unchanged.
-    if (this.hasCustomColor !== hasCustomColor) {
-      this.hasCustomColor = hasCustomColor;
+    // Filled variants choose label contrast when no explicit override exists.
+    if (!labelColor && colorChannels && this.variant !== 'outline') {
+      labelColor = this.getContrastingLabel(colorChannels);
     }
 
-    if (this.customLabelColor !== customLabelColor) {
-      this.customLabelColor = customLabelColor;
+    // Avoid rerendering when neither derived value changed.
+    if (
+      this.customPalette.color !== color ||
+      this.customPalette.labelColor !== labelColor
+    ) {
+      this.customPalette = { color, labelColor };
     }
   }
 
@@ -88,26 +103,33 @@ export class FormaButton {
       return undefined;
     }
 
-    // Resolve twice to detect missing variables that fall back to inherited color.
-    const darkResolution = this.resolveComputedColor(color, 'rgb(1, 2, 3)');
-    const lightResolution = this.resolveComputedColor(color, 'rgb(251, 252, 253)');
+    let resolvedColor = color;
 
-    if (!darkResolution || darkResolution !== lightResolution) {
-      return undefined;
+    // Resolve variables twice to detect missing values that inherit the probe color.
+    if (color.includes('var(')) {
+      const darkResolution = this.resolveComputedColor(color, 'rgb(1, 2, 3)');
+      const lightResolution = this.resolveComputedColor(color, 'rgb(251, 252, 253)');
+
+      if (!darkResolution || darkResolution !== lightResolution) {
+        return undefined;
+      }
+
+      resolvedColor = darkResolution;
     }
 
     // Let canvas normalize supported browser color formats to sRGB channels.
     const canvas = document.createElement('canvas');
+    canvas.width = 1;
+    canvas.height = 1;
+
     const context = canvas.getContext('2d', { willReadFrequently: true });
 
     if (!context) {
       return undefined;
     }
 
-    canvas.width = 1;
-    canvas.height = 1;
     context.clearRect(0, 0, 1, 1);
-    context.fillStyle = darkResolution;
+    context.fillStyle = resolvedColor;
     context.fillRect(0, 0, 1, 1);
 
     const [red, green, blue] = context.getImageData(0, 0, 1, 1).data;
@@ -118,20 +140,34 @@ export class FormaButton {
   private resolveComputedColor(color: string, inheritedColor: string) {
     const container = document.createElement('span');
     const probe = document.createElement('span');
+    const hostStyle = getComputedStyle(this.host);
 
-    // Keep the temporary resolver out of layout and accessibility trees.
-    container.hidden = true;
+    // Keep the resolver invisible without using display:none computed styles.
+    container.setAttribute('aria-hidden', 'true');
+    container.style.position = 'fixed';
+    container.style.visibility = 'hidden';
     container.style.color = inheritedColor;
+
+    // Copy referenced variables so host-scoped color values resolve externally.
+    for (const match of color.matchAll(/var\(\s*(--[\w-]+)/g)) {
+      const property = match[1];
+      const value = hostStyle.getPropertyValue(property);
+
+      if (value) {
+        container.style.setProperty(property, value);
+      }
+    }
+
     probe.style.color = color;
     container.append(probe);
-    this.host.append(container);
+    document.documentElement.append(container);
 
     const resolvedColor = getComputedStyle(probe).color;
     container.remove();
     return resolvedColor;
   }
 
-  // Compare black and white using the WCAG relative-luminance formula.
+  // Favor white and use black only when the background is genuinely bright.
   private getContrastingLabel([red, green, blue]: [number, number, number]) {
     const toLinear = (channel: number) => {
       const value = channel / 255;
@@ -140,10 +176,7 @@ export class FormaButton {
 
     const luminance =
       0.2126 * toLinear(red) + 0.7152 * toLinear(green) + 0.0722 * toLinear(blue);
-    const blackContrast = (luminance + 0.05) / 0.05;
-    const whiteContrast = 1.05 / (luminance + 0.05);
-
-    return blackContrast >= whiteContrast ? '#000000' : '#ffffff';
+    return luminance >= 0.6 ? '#000000' : '#ffffff';
   }
 
   // Resolve the variant default unless the consumer supplied an override.
@@ -151,32 +184,44 @@ export class FormaButton {
     return this.animation ?? defaultAnimations[this.variant] ?? 'none';
   }
 
-  // Pass only validated palette values into variant styles.
-  private get customPaletteStyle(): { [key: string]: string } | undefined {
-    if (!this.hasCustomColor || !this.color) {
-      return undefined;
+  // Apply palette values to the host so projected Vue content inherits them.
+  private get customPaletteStyle(): { [key: string]: string } {
+    const style: { [key: string]: string } = {};
+
+    // Keep invalid or absent values out of the generated inline styles.
+    if (this.customPalette.color) {
+      style['--forma-button-custom-color'] = this.customPalette.color;
     }
 
-    return {
-      '--forma-button-custom-color': this.color,
-      '--forma-button-custom-label-color': this.customLabelColor,
-    };
+    if (this.customPalette.labelColor) {
+      style['--forma-button-custom-label-color'] = this.customPalette.labelColor;
+    }
+
+    // Match the active variant's CSS fallback at the slot-content boundary.
+    const labelColor =
+      this.variant === 'outline'
+        ? 'var(--forma-button-custom-label-color, var(--forma-button-custom-color, var(--forma-button-base-color)))'
+        : 'var(--forma-button-custom-label-color, #ffffff)';
+    style.color = `var(--forma-button-color, ${labelColor})`;
+
+    return style;
   }
 
   // Render a native control so browser form and keyboard behavior is preserved.
   render() {
     return (
-      <button
-        aria-label={this.ariaLabel}
-        data-animation={this.effectiveAnimation}
-        disabled={this.disabled}
-        name={this.name}
-        style={this.customPaletteStyle}
-        type={this.type}
-        value={this.value}
-      >
-        <slot />
-      </button>
+      <Host style={this.customPaletteStyle}>
+        <button
+          aria-label={this.ariaLabel}
+          data-animation={this.effectiveAnimation}
+          disabled={this.disabled}
+          name={this.name}
+          type={this.type}
+          value={this.value}
+        >
+          <slot />
+        </button>
+      </Host>
     );
   }
 }
