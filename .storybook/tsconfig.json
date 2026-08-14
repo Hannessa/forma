@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx",
+    "../docs/**/*.mdx",
+    "../src/**/*.stories.ts"
+  ]
+}

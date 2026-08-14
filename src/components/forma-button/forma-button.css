@@ -1,3 +1,18 @@
+/**
+ * @prop --forma-button-background: Button background for the resting state.
+ * @prop --forma-button-background-hover: Button background while hovered.
+ * @prop --forma-button-background-active: Button background while pressed.
+ * @prop --forma-button-color: Visible label color.
+ * @prop --forma-button-border-color: Button border color.
+ * @prop --forma-button-border-radius: Button corner radius.
+ * @prop --forma-button-focus-color: Visible keyboard focus-ring color.
+ * @prop --forma-button-font-weight: Visible label font weight.
+ * @prop --forma-button-gap: Gap between slotted button contents.
+ * @prop --forma-button-min-height: Minimum button height.
+ * @prop --forma-button-padding-block: Vertical button padding.
+ * @prop --forma-button-padding-inline: Horizontal button padding.
+ * @prop --forma-button-disabled-opacity: Opacity of a disabled button.
+ */
 :host {
   /* Define the shared primary fallback once for all neutral variants. */
   --forma-button-base-color: var(

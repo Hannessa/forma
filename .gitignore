@@ -5,3 +5,7 @@ src/react/generated/
 src/vue/generated/
 *.log
 *.bat
+custom-elements.json
+storybook-static/
+.storybook-cache/
+node_modules/.cache/storybook/

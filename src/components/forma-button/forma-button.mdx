@@ -1,0 +1,313 @@
+import { ArgTypes, Canvas, Meta } from '@storybook/addon-docs/blocks';
+import { FrameworkCode } from '../../../.storybook/components/FrameworkCode';
+import * as ButtonStories from './forma-button.stories';
+
+<Meta title="Components/Button" />
+
+<div className="forma-docs">
+  # Button
+
+  Buttons trigger actions. `forma-button` renders a native button in scoped light
+  DOM, retaining browser keyboard, focus, disabled, submit, and reset behavior.
+
+  <Canvas of={ButtonStories.Primary} sourceState="none" />
+
+  <FrameworkCode
+    react={`import { Button } from 'forma/react';
+
+export function SaveButton() {
+  return <Button type="button">Save changes</Button>;
+}`}
+    vue={`<script setup lang="ts">
+import { Button } from 'forma/vue';
+</script>
+
+<template>
+  <Button type="button">Save changes</Button>
+</template>`}
+    webComponent={`import 'forma/components/button';
+
+<forma-button type="button">Save changes</forma-button>`}
+  />
+
+  ## Variants
+
+  `simple` is the default solid button, `cute` provides a rounded pink treatment,
+  and `outline` uses the primary color for its border and label.
+
+  <Canvas of={ButtonStories.Variants} sourceState="none" />
+
+  <FrameworkCode
+    react={`import { Button } from 'forma/react';
+
+export function ButtonVariants() {
+  return (
+    <>
+      <Button variant="simple">Simple</Button>
+      <Button variant="cute">Cute</Button>
+      <Button variant="cute" animation="none">Cute, no motion</Button>
+      <Button variant="outline">Outline</Button>
+    </>
+  );
+}`}
+    vue={`<script setup lang="ts">
+import { Button } from 'forma/vue';
+</script>
+
+<template>
+  <Button variant="simple">Simple</Button>
+  <Button variant="cute">Cute</Button>
+  <Button variant="cute" animation="none">Cute, no motion</Button>
+  <Button variant="outline">Outline</Button>
+</template>`}
+    webComponent={`<forma-button variant="simple">Simple</forma-button>
+<forma-button variant="cute">Cute</forma-button>
+<forma-button variant="cute" animation="none">Cute, no motion</forma-button>
+<forma-button variant="outline">Outline</forma-button>`}
+  />
+
+  ## Custom colors
+
+  `color` accepts a valid solid CSS color, including CSS variables. Filled variants
+  choose readable black or white label text automatically; use `textColor` in
+  React and Vue or `text-color` in HTML for an explicit label color.
+
+  <Canvas of={ButtonStories.CustomColors} sourceState="none" />
+
+  <FrameworkCode
+    react={`import type { CSSProperties } from 'react';
+import { Button } from 'forma/react';
+
+export function ColoredButtons() {
+  return (
+    <div style={{ '--brand-color': 'hsl(262 52% 55%)' } as CSSProperties}>
+      <Button color="gold">Automatic contrast</Button>
+      <Button color="gold" textColor="navy">Explicit label</Button>
+      <Button variant="cute" color="var(--brand-color)">Brand color</Button>
+      <Button variant="outline" color="seagreen">Outline color</Button>
+    </div>
+  );
+}`}
+    vue={`<script setup lang="ts">
+import { Button } from 'forma/vue';
+</script>
+
+<template>
+  <div style="--brand-color: hsl(262 52% 55%)">
+    <Button color="gold">Automatic contrast</Button>
+    <Button color="gold" text-color="navy">Explicit label</Button>
+    <Button variant="cute" color="var(--brand-color)">Brand color</Button>
+    <Button variant="outline" color="seagreen">Outline color</Button>
+  </div>
+</template>`}
+    webComponent={`<div style="--brand-color: hsl(262 52% 55%)">
+  <forma-button color="gold">Automatic contrast</forma-button>
+  <forma-button color="gold" text-color="navy">Explicit label</forma-button>
+  <forma-button variant="cute" color="var(--brand-color)">Brand color</forma-button>
+  <forma-button variant="outline" color="seagreen">Outline color</forma-button>
+</div>`}
+  />
+
+  ## Disabled
+
+  The `disabled` property forwards the native disabled state and prevents pointer,
+  keyboard, and form interaction.
+
+  <Canvas of={ButtonStories.Disabled} sourceState="none" />
+
+  <FrameworkCode
+    react={`import { Button } from 'forma/react';
+
+export function DisabledButtons() {
+  return (
+    <>
+      <Button disabled>Simple</Button>
+      <Button disabled variant="cute">Cute</Button>
+      <Button disabled variant="outline">Outline</Button>
+    </>
+  );
+}`}
+    vue={`<script setup lang="ts">
+import { Button } from 'forma/vue';
+</script>
+
+<template>
+  <Button disabled>Simple</Button>
+  <Button disabled variant="cute">Cute</Button>
+  <Button disabled variant="outline">Outline</Button>
+</template>`}
+    webComponent={`<forma-button disabled>Simple</forma-button>
+<forma-button disabled variant="cute">Cute</forma-button>
+<forma-button disabled variant="outline">Outline</forma-button>`}
+  />
+
+  ## Form behavior
+
+  `type`, `name`, and `value` map to their native button equivalents. The default
+  type is `button`, preventing accidental form submission.
+
+  <Canvas of={ButtonStories.FormBehavior} sourceState="none" />
+
+  <FrameworkCode
+    react={`import { useState } from 'react';
+import { Button } from 'forma/react';
+
+export function ProjectForm() {
+  const [status, setStatus] = useState('Ready');
+
+  return (
+    <form
+      onReset={() => setStatus('Form reset')}
+      onSubmit={(event) => {
+        event.preventDefault();
+        setStatus('Project saved');
+      }}
+    >
+      <input name="project" defaultValue="Forma" />
+      <Button type="submit" name="action" value="save">Save</Button>
+      <Button type="reset" variant="outline">Reset</Button>
+      <output aria-live="polite">{status}</output>
+    </form>
+  );
+}`}
+    vue={`<script setup lang="ts">
+import { ref } from 'vue';
+import { Button } from 'forma/vue';
+
+const status = ref('Ready');
+</script>
+
+<template>
+  <form
+    @reset="status = 'Form reset'"
+    @submit.prevent="status = 'Project saved'"
+  >
+    <input name="project" value="Forma" />
+    <Button type="submit" name="action" value="save">Save</Button>
+    <Button type="reset" variant="outline">Reset</Button>
+    <output aria-live="polite">{{ status }}</output>
+  </form>
+</template>`}
+    webComponent={`<form id="project-form">
+  <input name="project" value="Forma" />
+  <forma-button type="submit" name="action" value="save">Save</forma-button>
+  <forma-button type="reset" variant="outline">Reset</forma-button>
+  <output aria-live="polite">Ready</output>
+</form>
+
+<script>
+  const form = document.querySelector('#project-form');
+  const output = form.querySelector('output');
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    output.textContent = 'Project saved';
+  });
+
+  form.addEventListener('reset', () => {
+    output.textContent = 'Form reset';
+  });
+</script>`}
+  />
+
+  ## Events
+
+  Button clicks use the native `click` event. Forma does not emit a duplicate
+  custom event.
+
+  <Canvas of={ButtonStories.ClickEvent} sourceState="none" />
+
+  <FrameworkCode
+    react={`import { useState } from 'react';
+import { Button } from 'forma/react';
+
+export function ClickCounter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <Button onClick={() => setCount(count + 1)}>
+      Clicked {count} times
+    </Button>
+  );
+}`}
+    vue={`<script setup lang="ts">
+import { ref } from 'vue';
+import { Button } from 'forma/vue';
+
+const count = ref(0);
+</script>
+
+<template>
+  <Button @click="count++">Clicked {{ count }} times</Button>
+</template>`}
+    webComponent={`<forma-button id="counter">Clicked 0 times</forma-button>
+
+<script>
+  const button = document.querySelector('#counter');
+  let count = 0;
+
+  button.addEventListener('click', () => {
+    count += 1;
+    button.textContent = 'Clicked ' + count + ' times';
+  });
+</script>`}
+  />
+
+  ## Accessibility
+
+  Visible text provides the accessible name in normal use. Supply `ariaLabel` in
+  React and Vue or `aria-label` in HTML when the slotted content is only an icon
+  or symbol.
+
+  <div className="forma-example-row">
+    <forma-button aria-label="Add to favorites" variant="cute">♥</forma-button>
+  </div>
+
+  <FrameworkCode
+    react={`import { Button } from 'forma/react';
+
+export function FavoriteButton() {
+  return <Button ariaLabel="Add to favorites" variant="cute">♥</Button>;
+}`}
+    vue={`<script setup lang="ts">
+import { Button } from 'forma/vue';
+</script>
+
+<template>
+  <Button aria-label="Add to favorites" variant="cute">♥</Button>
+</template>`}
+    webComponent={`<forma-button aria-label="Add to favorites" variant="cute">
+  ♥
+</forma-button>`}
+  />
+
+  ## Styling
+
+  Button properties are convenient per-instance controls. CSS custom properties
+  take precedence for design-system theming. See the full [Theming guide](?path=/docs/guides-theming--docs).
+
+  ## API
+
+  ### Properties
+
+  This table is sourced from Stencil's Custom Elements Manifest. Storybook
+  presentation metadata supplies color pickers and explains effective defaults.
+
+  <ArgTypes of={ButtonStories.Primary} exclude={['label']} />
+
+  When `animation` is omitted, `cute` uses `zoom`; `simple` and `outline` use
+  `none`. When `color` or `textColor` is omitted, the active variant supplies the
+  palette and label contrast.
+
+  ### Events
+
+  | Event | Type | Description |
+  | --- | --- | --- |
+  | `click` | `MouseEvent` | Native click event that bubbles through the component host. |
+
+  ### Slots
+
+  | Slot | Description |
+  | --- | --- |
+  | Default | Visible button label or other button content. |
+</div>

@@ -16,6 +16,11 @@ const defaultAnimations: Record<FormaButtonVariant, FormaButtonAnimation> = {
   outline: 'none',
 };
 
+/**
+ * A native button control with Forma variants, colors, and optional motion.
+ *
+ * @slot - Visible button content.
+ */
 @Component({
   tag: 'forma-button',
   styleUrls: [
@@ -33,29 +38,31 @@ export class FormaButton {
   // Store all validated palette values together so rendering stays atomic.
   @State() private customPalette: CustomPalette = {};
 
-  // Disable native pointer, keyboard, and form interactions.
+  /** Disables native pointer, keyboard, and form interactions. */
   @Prop({ reflect: true }) disabled = false;
 
-  // Use the original neutral appearance unless another variant is selected.
+  /** Selects the visual button style. */
   @Prop({ reflect: true }) variant: FormaButtonVariant = 'simple';
 
-  // Override the variant palette with a solid CSS color.
+  /** Overrides the variant palette with a valid solid CSS color. */
   @Prop({ reflect: true }) color?: string;
 
-  // Override the variant or automatically selected label color.
+  /** Overrides the variant or automatically selected label color. */
   @Prop({ attribute: 'text-color', reflect: true }) textColor?: string;
 
-  // Override the motion selected by the active variant.
+  /** Overrides the motion selected by the active variant. */
   @Prop({ reflect: true }) animation?: FormaButtonAnimation;
 
-  // Keep buttons inert by default to avoid accidental form submissions.
+  /** Sets the native button type and defaults to the inert button behavior. */
   @Prop({ reflect: true }) type: FormaButtonType = 'button';
 
-  // Forward native form submission metadata to the inner button.
+  /** Sets the name submitted with the button's form value. */
   @Prop({ reflect: true }) name?: string;
+
+  /** Sets the value submitted when this button initiates form submission. */
   @Prop({ reflect: true }) value?: string;
 
-  // Give icon-only buttons an accessible name.
+  /** Supplies an accessible name, especially for icon-only buttons. */
   @Prop({ attribute: 'aria-label' }) ariaLabel: string | null = null;
 
   // Resolve the initial palette before rendering to avoid a label-color flash.

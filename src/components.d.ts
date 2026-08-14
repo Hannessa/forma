@@ -8,31 +8,56 @@ import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 import { FormaButtonAnimation, FormaButtonType, FormaButtonVariant } from "./components/forma-button/forma-button";
 export { FormaButtonAnimation, FormaButtonType, FormaButtonVariant } from "./components/forma-button/forma-button";
 export namespace Components {
+    /**
+     * A native button control with Forma variants, colors, and optional motion.
+     */
     interface FormaButton {
+        /**
+          * Overrides the motion selected by the active variant.
+         */
         "animation"?: FormaButtonAnimation;
         /**
+          * Supplies an accessible name, especially for icon-only buttons.
           * @default null
          */
         "ariaLabel": string | null;
+        /**
+          * Overrides the variant palette with a valid solid CSS color.
+         */
         "color"?: string;
         /**
+          * Disables native pointer, keyboard, and form interactions.
           * @default false
          */
         "disabled": boolean;
+        /**
+          * Sets the name submitted with the button's form value.
+         */
         "name"?: string;
+        /**
+          * Overrides the variant or automatically selected label color.
+         */
         "textColor"?: string;
         /**
+          * Sets the native button type and defaults to the inert button behavior.
           * @default 'button'
          */
         "type": FormaButtonType;
+        /**
+          * Sets the value submitted when this button initiates form submission.
+         */
         "value"?: string;
         /**
+          * Selects the visual button style.
           * @default 'simple'
          */
         "variant": FormaButtonVariant;
     }
 }
 declare global {
+    /**
+     * A native button control with Forma variants, colors, and optional motion.
+     */
     interface HTMLFormaButtonElement extends Components.FormaButton, HTMLStencilElement {
     }
     var HTMLFormaButtonElement: {
@@ -44,25 +69,47 @@ declare global {
     }
 }
 declare namespace LocalJSX {
+    /**
+     * A native button control with Forma variants, colors, and optional motion.
+     */
     interface FormaButton {
+        /**
+          * Overrides the motion selected by the active variant.
+         */
         "animation"?: FormaButtonAnimation;
         /**
+          * Supplies an accessible name, especially for icon-only buttons.
           * @default null
          */
         "ariaLabel"?: string | null;
+        /**
+          * Overrides the variant palette with a valid solid CSS color.
+         */
         "color"?: string;
         /**
+          * Disables native pointer, keyboard, and form interactions.
           * @default false
          */
         "disabled"?: boolean;
+        /**
+          * Sets the name submitted with the button's form value.
+         */
         "name"?: string;
+        /**
+          * Overrides the variant or automatically selected label color.
+         */
         "textColor"?: string;
         /**
+          * Sets the native button type and defaults to the inert button behavior.
           * @default 'button'
          */
         "type"?: FormaButtonType;
+        /**
+          * Sets the value submitted when this button initiates form submission.
+         */
         "value"?: string;
         /**
+          * Selects the visual button style.
           * @default 'simple'
          */
         "variant"?: FormaButtonVariant;
@@ -88,6 +135,9 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
+            /**
+             * A native button control with Forma variants, colors, and optional motion.
+             */
             "forma-button": LocalJSX.IntrinsicElements["forma-button"] & JSXBase.HTMLAttributes<HTMLFormaButtonElement>;
         }
     }
