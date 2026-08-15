@@ -9,6 +9,7 @@
   --ifm-code-font-size: 92%;
   --ifm-font-family-base: var(--forma-font-family, system-ui, sans-serif);
   --ifm-heading-font-weight: 750;
+  --forma-navigation-max-width: 1680px;
 }
 
 [data-theme='dark'] {
@@ -23,6 +24,22 @@
 
 .navbar__title {
   letter-spacing: -0.025em;
+}
+
+/* Center the outer navigation without changing the inner content width. */
+@media (min-width: 997px) {
+  .theme-layout-navbar {
+    padding-inline: max(
+      var(--ifm-navbar-padding-horizontal),
+      calc((100% - var(--forma-navigation-max-width)) / 2)
+    );
+  }
+
+  .docs-wrapper .theme-layout-main {
+    margin-inline: auto;
+    max-width: var(--forma-navigation-max-width);
+    width: 100%;
+  }
 }
 
 .forma-demo {

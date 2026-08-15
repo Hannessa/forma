@@ -172,7 +172,9 @@ and are not committed.
 The Forma component catalogue is a Docusaurus site with a branded homepage,
 installation and theming guides, and interactive component documentation. The
 hosted site is available at [hannessa.github.io/forma](https://hannessa.github.io/forma/),
-with documentation under `/forma/docs/`.
+with documentation under `/forma/docs/`. On wide screens, the top navigation
+and documentation sidebar sit in a centered outer shell while content retains
+Docusaurus's default readable width.
 
 Each component has one sidebar page with result-first examples and synchronized
 syntax tabs ordered React, Vue, and Web Component. The live examples use the
