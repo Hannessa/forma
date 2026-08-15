@@ -1,0 +1,72 @@
+---
+id: getting-started
+title: Getting Started
+sidebar_position: 1
+---
+
+import FrameworkCode from '@site/src/components/FrameworkCode';
+
+# Getting Started
+
+Forma requires Node.js 20 or newer. React 18 or 19 and Vue 3 are optional peer
+dependencies; an application only needs the framework it uses.
+
+## Install locally
+
+Install Forma from its local directory while the package is under development:
+
+```bash
+npm install ../forma
+```
+
+:::note
+
+Once Forma is published to the npm registry, use `npm install forma`. Until
+then, install it from the local path.
+
+:::
+
+## Use your first component
+
+<FrameworkCode
+  react={`import { Button } from 'forma/react';
+
+export function SaveButton() {
+  return <Button type="button">Save</Button>;
+}`}
+  vue={`<script setup lang="ts">
+import { Button } from 'forma/vue';
+</script>
+
+<template>
+  <Button type="button">Save</Button>
+</template>`}
+  webComponent={`import 'forma/components/button';
+
+<forma-button type="button">Save</forma-button>`}
+/>
+
+The React and Vue imports register their underlying custom element automatically.
+
+## Optional base CSS
+
+Components include self-contained styles and fallback values. Import the base
+stylesheet when the application should share Forma's neutral global tokens:
+
+```ts
+import 'forma/css/base.css';
+```
+
+## Register all Web Components
+
+For the smallest application bundle, register individual components as shown
+above. Applications that prefer one aggregate registration point can use:
+
+```ts
+import { defineCustomElements } from 'forma/components';
+
+defineCustomElements();
+```
+
+Next, explore the [Button component](/docs/components/button) or learn how to
+[theme Forma](/docs/theming).

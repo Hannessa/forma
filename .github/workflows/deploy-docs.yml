@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Build and deploy Storybook
+    name: Build and deploy Docusaurus
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -36,12 +36,12 @@ jobs:
           node-version: 20
           cache: npm
 
-      # Let the Storybook prebuild script perform the one required Forma build.
+      # Install exactly the dependency versions recorded in the lockfile.
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
       - name: Build documentation
-        run: npm run build-storybook
+        run: npm run build:docs
 
       # Prepare and upload the static site expected by GitHub Pages.
       - name: Configure GitHub Pages
@@ -50,7 +50,7 @@ jobs:
       - name: Upload documentation artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: storybook-static
+          path: website/build
 
       - name: Deploy documentation
         id: deployment

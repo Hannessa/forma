@@ -158,38 +158,53 @@ src/
   entries/          Framework-agnostic registration entries
   react/            React public barrel and generated wrappers
   vue/              Vue public barrel and generated wrappers
-docs/                Storybook overview and guide pages
-.storybook/          Documentation configuration and reusable doc UI
+website/             Docusaurus configuration, pages, components, and styling
+  docs/               Overview, guides, and component reference pages
+  src/                Homepage and reusable documentation UI
 ```
 
-`src/react/generated`, `src/vue/generated`, `dist`, `loader`, `custom-elements.json`, and `storybook-static` are generated and are not committed.
+`src/react/generated`, `src/vue/generated`, `dist`, `loader`,
+`custom-elements.json`, `website/.docusaurus`, and `website/build` are generated
+and are not committed.
 
 ## Documentation
 
-The Forma component catalogue is a Storybook site with a start page, installation and theming guides, and interactive component documentation. The hosted site is available at [hannessa.github.io/forma](https://hannessa.github.io/forma/).
+The Forma component catalogue is a Docusaurus site with a branded homepage,
+installation and theming guides, and interactive component documentation. The
+hosted site is available at [hannessa.github.io/forma](https://hannessa.github.io/forma/),
+with documentation under `/forma/docs/`.
 
-Each component has one sidebar page with result-first examples and syntax tabs ordered React, Vue, and Web Component. The live examples use the native Web Component implementation. Stencil generates `custom-elements.json` during the build so property names, attributes, types, defaults, slots, and CSS custom properties stay aligned with the component source.
+Each component has one sidebar page with result-first examples and synchronized
+syntax tabs ordered React, Vue, and Web Component. The live examples use the
+native Web Component implementation. Stencil generates `custom-elements.json`
+during the build so properties, attributes, types, defaults, slots, and CSS
+custom properties stay aligned with the component source.
 
 Start the documentation development server after installing dependencies:
 
 ```sh
-npm run storybook
+npm run docs
 ```
 
-This performs a normal Forma build, then runs the Stencil watcher and Storybook together at `http://localhost:6006`.
-Generated wrappers and `custom-elements.json` are excluded from Stencil's watch inputs so documentation rebuilds do not trigger themselves.
+This performs a normal Forma build, then runs the Stencil watcher and Docusaurus
+together at `http://localhost:3000/forma/`. Generated wrappers and
+`custom-elements.json` are excluded from Stencil's watch inputs so documentation
+rebuilds do not trigger themselves.
 
 Create the deployable static site with:
 
 ```sh
-npm run build-storybook
+npm run build:docs
 ```
 
-The result is written to `storybook-static`. Pushes to `main` deploy that directory to GitHub Pages through `.github/workflows/deploy-docs.yml`.
+The result is written to `website/build`. Preview an existing production build
+with `npm run serve:docs`. Pushes to `main` deploy `website/build` to GitHub Pages
+through `.github/workflows/deploy-docs.yml`.
 
 The initial documentation contains:
 
-- **Overview**, the Forma start page
+- **Homepage**, the Forma product introduction
+- **Overview**, the documentation start page
 - **Getting Started**, with local installation and framework usage
 - **Theming**, with shared and component token reference
 - **Button**, with result-first examples, framework-specific code, native event guidance, and generated API documentation

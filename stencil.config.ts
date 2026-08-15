@@ -28,7 +28,7 @@ export const config: Config = {
       generateTypeDeclarations: true,
       empty: !isWatchBuild,
     },
-    // Generate the standards-based metadata consumed by Storybook Autodocs.
+    // Generate the standards-based metadata consumed by the Docusaurus API tables.
     {
       type: 'docs-custom-elements-manifest',
       file: 'custom-elements.json',
