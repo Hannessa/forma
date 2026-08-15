@@ -2,7 +2,8 @@
 # General Guidelines
 
 - Always read the README.md file before making changes to understand the project.
-- Always keep the README.md file up-to-date as a general overview and documentation.
+- Always keep the README.md file up-to-date as a short overview with a link to the website, a direct link to install instructions and another link to the component reference start page in the docs.
+- Always keep the website docs up-to-date.
 - When writing code, always follow the coding guidelines below.
 
 # Coding Guidelines
